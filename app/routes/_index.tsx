@@ -3,8 +3,8 @@ import { ArrowUp } from "~/components/svgs/ArrowUp";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Jon Teawell | Frontend web developer" },
+    { name: "description", content: "Jon Teawell | Frontend web developer" },
   ];
 };
 
