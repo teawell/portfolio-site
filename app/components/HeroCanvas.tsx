@@ -1,11 +1,11 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, RefObject } from "react";
 import { canvasParticles } from "~/lib/canvasParticles";
 
 type Props = {
-  children?: React.ReactNode;
+  areasToAvoidRefs?: RefObject<HTMLElement>[];
 };
 
-export const HeroCanvas = (props: Props) => {
+export const HeroCanvas = ({ areasToAvoidRefs, ...props }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -13,17 +13,18 @@ export const HeroCanvas = (props: Props) => {
     if (canvas) {
       const context = canvas.getContext("2d");
       if (context) {
-        const animationRequestFrameId = canvasParticles(canvas, context);
-        console.log('frameID', animationRequestFrameId);
-        
+        const animationRequestFrameId = canvasParticles(
+          canvas,
+          context,
+          areasToAvoidRefs || []
+        );
+
         return () => {
-            console.log('clean up');
-            
           cancelAnimationFrame(animationRequestFrameId);
         };
       }
     }
-  }, [canvasRef]);
+  }, [areasToAvoidRefs, canvasRef]);
 
   return (
     <canvas
