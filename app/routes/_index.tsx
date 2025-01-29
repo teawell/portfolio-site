@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
+import { HeroCanvas } from "~/components/HeroCanvas";
 import { ArrowUp } from "~/components/svgs/ArrowUp";
 
 export const meta: MetaFunction = () => {
@@ -10,8 +11,9 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="flex flex-col items-center gap-16">
+    <div className="flex h-screen items-center justify-center relative">
+      <HeroCanvas />
+      <div className="flex flex-col items-center z-10">
         <header className="flex flex-col items-center gap-9 text-center">
           <h1 className="text-5xl/snug mb-4 text-gray-200 tracking-wider">
             <div>
