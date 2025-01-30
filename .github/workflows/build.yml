@@ -1,4 +1,4 @@
-name: Linting and Type check
+name: Run build
 on: [push]
 jobs:
   check:
@@ -6,6 +6,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
       - name: Runs Build
         run: npm run build
       - run: echo "Status is ${{ job.status }}."

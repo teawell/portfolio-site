@@ -6,6 +6,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
       - name: Runs lint
         run: npm run lint
       - name: Runs Typecheck
