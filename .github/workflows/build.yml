@@ -1,0 +1,11 @@
+name: Linting and Type check
+on: [push]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Runs Build
+        run: npm run build
+      - run: echo "Status is ${{ job.status }}."
