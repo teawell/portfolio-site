@@ -1,7 +1,6 @@
 import { RefObject } from "react";
 import { Particle } from "./Particle";
 
-
 const generateParticles = (
   amount: number,
   canvas: HTMLCanvasElement,
@@ -18,7 +17,7 @@ const generateParticles = (
       -0.5 + Math.random(),
       canvas,
       context,
-      boundingBoxesToAvoid
+      boundingBoxesToAvoid,
     );
   });
 };
@@ -47,26 +46,6 @@ export const initializeParticles = (
   context: CanvasRenderingContext2D,
   areasToAvoidRefs: RefObject<HTMLElement>[]
 ) => {
-  //   const cursor = {
-  //     x: window.innerWidth / 2,
-  //     y: window.innerHeight / 2,
-  //   };
-
-  //   addEventListener("mousemove", (e) => {
-  //     cursor.x = e.clientX;
-  //     cursor.y = e.clientY;
-  //   });
-
-  //   addEventListener(
-  //     "touchmove",
-  //     (e) => {
-  //       e.preventDefault();
-  //       cursor.x = e.touches[0].clientX;
-  //       cursor.y = e.touches[0].clientY;
-  //     },
-  //     { passive: false }
-  //   );
-
   const htmlElementToAvoid: HTMLElement[] = areasToAvoidRefs
     .map((item: RefObject<HTMLElement>) =>
       item && item.current ? item.current : null
@@ -85,9 +64,7 @@ export const initializeParticles = (
 
   addEventListener("resize", () => {
     setSize(canvas);
-    particlesArray.forEach((particle) =>
-      particle.updateOnReSize(canvas, htmlElementToAvoid)
-    );
+    particlesArray.forEach((particle) => particle.updateOnReSize(canvas));
   });
 
   return animate(particlesArray, canvas, context);

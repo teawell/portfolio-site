@@ -12,11 +12,9 @@ export class Particle {
   isColliding(boxElement: HTMLElement) {
     const box = boxElement.getBoundingClientRect();
     const isWithinVerticalSpace =
-      this.y > box.top - this.radius &&
-      this.y < box.top + box.height + this.radius;
+      this.y > box.top - this.radius && this.y < box.bottom + this.radius;
     const isWithinHorizontalSpace =
-      this.x > box.left - this.radius &&
-      this.x < box.left + box.width + this.radius;
+      this.x > box.left - this.radius && this.x < box.right + this.radius;
 
     return isWithinHorizontalSpace && isWithinVerticalSpace;
   }
@@ -30,7 +28,7 @@ export class Particle {
     ySpeed: number,
     canvas: HTMLCanvasElement,
     context: CanvasRenderingContext2D,
-    boundingBoxesToAvoid: HTMLElement[]
+    boundingBoxesToAvoid: HTMLElement[],
   ) {
     this.x = x;
     this.y = y;
@@ -66,6 +64,7 @@ export class Particle {
   }
 
   animate() {
+    // Check for canvas boundaries
     if (this.y - this.radius < 0 || this.y + this.radius > this.canvas.height) {
       this.ySpeed = -this.ySpeed;
     } else if (
@@ -75,6 +74,7 @@ export class Particle {
       this.xSpeed = -this.xSpeed;
     }
 
+    // Check for collision with HTML elements
     const collidingItem = this.boundingBoxesToAvoid.find((box) =>
       this.isColliding(box)
     );
@@ -84,29 +84,24 @@ export class Particle {
       // Check whether a change of vertical/horizontal direction would prevent collision, if so do it
       if (
         this.y - this.ySpeed < collidingItemBox.top - this.radius ||
-        this.y - this.ySpeed >
-          collidingItemBox.top + collidingItemBox.height + this.radius
+        this.y - this.ySpeed > collidingItemBox.bottom + this.radius
       ) {
         this.ySpeed = -this.ySpeed;
       } else if (
         this.x - this.xSpeed < collidingItemBox.left - this.radius ||
-        this.x - this.xSpeed >
-          collidingItemBox.left + collidingItemBox.width + this.radius
+        this.x - this.xSpeed > collidingItemBox.right + this.radius
       ) {
         this.xSpeed = -this.xSpeed;
       }
     }
 
+    // Update speed
     this.x += this.xSpeed;
     this.y += this.ySpeed;
     this.create();
   }
 
-  updateOnReSize(
-    canvas: HTMLCanvasElement,
-    boundingBoxesToAvoid: HTMLElement[]
-  ) {
+  updateOnReSize(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
-    this.boundingBoxesToAvoid = boundingBoxesToAvoid;
   }
 }
