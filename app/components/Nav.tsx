@@ -31,7 +31,7 @@ export const Nav = () => {
   const location = useLocation();
 
   return (
-    <nav className="flex flex-row-reverse p-2 bg-gray-900 shadow-lg sticky top-0">
+    <nav className="flex flex-row-reverse p-2 bg-gray-900 shadow-lg sticky top-0 bg-gradient-to-t from-gray-800 to-20% to-gray-900">
       <ul className="inline-flex text-xl/snug mr-12">
         {navItems.map(({ id, description }) => (
           <li
