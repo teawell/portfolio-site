@@ -39,13 +39,24 @@ export const Hero = () => {
       <div className="flex flex-col items-center relative">
         <header className="flex flex-col items-center gap-9 text-center">
           <h1 className="text-5xl/snug mb-4 tracking-wider">
-            <div ref={textOneRef} className="inline-block">
+            <div
+              ref={textOneRef}
+              className="inline-block animate-fade-right animate-once animate-delay-800"
+            >
               Hello, I&apos;m <span className="text-orange-600">Jon</span>.
             </div>
-            <div ref={textTwoRef}>I&apos;m a frontend web developer.</div>
+            <div
+              ref={textTwoRef}
+              className="animate-fade-left animate-once animate-delay-[1200ms]"
+            >
+              I&apos;m a frontend web developer.
+            </div>
           </h1>
 
-          <NavLink to="#about">
+          <NavLink
+            to="#about"
+            className="animate-fade-up animate-once animate-delay-[1600ms] animate-duration-[1400ms]"
+          >
             <button
               ref={buttonRef}
               className="text-orange-600 flex text-2xl justify-center items-center border-solid border-2 border-orange-600 py-2 px-6 rounded-md hover:border-orange-500 hover:text-orange-500 group transition"
