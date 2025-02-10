@@ -187,6 +187,7 @@ const experience: Experience[] = [
       "ESLint",
       "PostgreSQL",
       "REST",
+      "Wordpress"
     ],
   },
 ];

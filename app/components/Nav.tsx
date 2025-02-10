@@ -19,10 +19,6 @@ const navItems: NavItem[] = [
     description: "Work History",
   },
   {
-    id: "projects",
-    description: "Projects",
-  },
-  {
     id: "contact",
     description: "Contact",
   },

@@ -1,5 +1,3 @@
-import { Skill } from "./Skill";
-
 export type Experience = {
   start: Date;
   end: Date;
@@ -9,6 +7,26 @@ export type Experience = {
   title: string;
   description: React.ReactNode;
   skills: string[];
+};
+
+const formatMonthYear = (date: Date) => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  return `${months[month]} ${year}`;
 };
 
 type Props = {
@@ -28,10 +46,10 @@ export const WorkExperience = ({ experience }: Props) => (
         companyLink,
         skills,
       }) => (
-        <div key={company}>
-          <div>
-            <div>
-              <h3>
+        <div key={company} className="mt-4 mb-8">
+          <div className="flex justify-between pb-1">
+            <div className="flex">
+              <h3 className="font-bold pr-2">
                 {companyLink ? (
                   <a
                     href={companyLink}
@@ -43,22 +61,21 @@ export const WorkExperience = ({ experience }: Props) => (
                 ) : (
                   company
                 )}
+                ,
               </h3>
               <p>{title}</p>
             </div>
-            <div>
-              <p>
-                {start.getMonth()} {start.getFullYear()}-{end.getMonth()}{" "}
-                {end.getFullYear()}
-              </p>
+            <div className="flex">
+              <p className="pr-2">{`${formatMonthYear(
+                start
+              )} - ${formatMonthYear(end)},`}</p>
               <p>{location}</p>
             </div>
           </div>
-          <p>{description}</p>
+          <p className="pb-2">{description}</p>
           <div className="flex flex-wrap">
-            {skills.map((skill) => (
-              <Skill key={`${company}-${skill}`} skill={skill} />
-            ))}
+            <h4 className="font-semibold pr-2">Skills:</h4>
+            <p>{skills.join(", ")}</p>
           </div>
         </div>
       )
