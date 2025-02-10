@@ -4,6 +4,7 @@ import { Hero } from "~/components/Hero";
 import { Nav } from "~/components/Nav";
 import { Section } from "~/components/Section";
 import { SectionTitle } from "~/components/SectionTitle";
+import { Work } from "~/components/Work";
 
 export const meta: MetaFunction = () => {
   return [
@@ -18,9 +19,7 @@ export default function Index() {
       <Hero />
       <Nav />
       <About />
-      <Section id="work">
-        <SectionTitle>Work</SectionTitle>
-      </Section>
+      <Work />
       <Section id="contact">
         <SectionTitle>Contact</SectionTitle>
       </Section>

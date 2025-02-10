@@ -52,3 +52,4 @@ This template comes with [Tailwind CSS](https://tailwindcss.com/) already config
 - Font
 - Load more for skills on mobile
 - Re-order skills in order of importance, maybe add logos for key skills
+- Redesign skill pills, add hover?

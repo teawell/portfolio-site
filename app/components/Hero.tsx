@@ -33,6 +33,7 @@ export const Hero = () => {
       className="flex h-screen items-center justify-center relative"
     >
       <canvas
+      aria-label="Background bouncing particle effect"
         ref={canvasRef}
         className="absolute top-0 bottom-0 left-0 right-0 h-full w-full  bg-gradient-to-b from-sky-900  via-slate-800 via-40% to-gray-900"
       />
