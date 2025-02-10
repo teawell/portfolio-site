@@ -46,7 +46,7 @@ export const WorkExperience = ({ experience }: Props) => (
         companyLink,
         skills,
       }) => (
-        <div key={company} className="mt-4 mb-8">
+        <div key={company} className="mb-8 last:mb-0">
           <div className="flex justify-between pb-1">
             <div className="flex">
               <h3 className="font-bold pr-2">
