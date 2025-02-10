@@ -3,6 +3,6 @@ type Props = {
   };
   
   export const SectionText = ({ children }: Props) => (
-    <div className="text-xl/snug text-center text-balance">{children}</div>
+    <div className="text-xl/snug text-balance text-center lg:text-left">{children}</div>
   );
   

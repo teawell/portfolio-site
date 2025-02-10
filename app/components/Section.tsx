@@ -4,5 +4,5 @@ type Props = {
 };
 
 export const Section = ({ children, id }: Props) => (
-  <section id={id} className="m-16 flex flex-col justify-center">{children}</section>
+  <section id={id} className="m-16 flex flex-col justify-center scroll-m-24">{children}</section>
 );

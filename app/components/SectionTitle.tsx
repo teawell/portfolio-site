@@ -3,5 +3,9 @@ type Props = {
 };
 
 export const SectionTitle = ({ children }: Props) => (
-  <h2 className="text-3xl/snug mb-8 px-5 py-1 rounded bg-gradient-to-r from-orange-600 to-50% to-transparent">{children}</h2>
+  <div className=" mb-8 text-center">
+    <h2 className="px-5 py-1 inline-block text-3xl/snug border-b-2 border-orange-500">
+      {children}
+    </h2>
+  </div>
 );

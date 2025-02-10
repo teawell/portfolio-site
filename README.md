@@ -50,3 +50,5 @@ This template comes with [Tailwind CSS](https://tailwindcss.com/) already config
 - Contact section
 - Footer
 - Font
+- Load more for skills on mobile
+- Re-order skills in order of importance, maybe add logos for key skills
