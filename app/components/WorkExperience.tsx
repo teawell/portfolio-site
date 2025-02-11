@@ -1,3 +1,5 @@
+import { SectionText } from "./SectionText";
+
 export type Experience = {
   start: Date;
   end: Date;
@@ -72,7 +74,7 @@ export const WorkExperience = ({ experience }: Props) => (
               <p>{location}</p>
             </div>
           </div>
-          <p className="pb-2">{description}</p>
+          <SectionText className="pb-2">{description}</SectionText>
           <div className="flex flex-wrap">
             <h4 className="font-semibold pr-2">Skills:</h4>
             <p>{skills.join(", ")}</p>
