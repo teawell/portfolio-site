@@ -49,8 +49,8 @@ export const WorkExperience = ({ experience }: Props) => (
         skills,
       }) => (
         <div key={company} className="mb-8 last:mb-0">
-          <div className="flex justify-between pb-1">
-            <div className="flex">
+          <div className="flex flex-wrap justify-between pb-2">
+            <div className="flex mr-2">
               <h3 className="font-bold pr-2">
                 {companyLink ? (
                   <a
@@ -67,7 +67,7 @@ export const WorkExperience = ({ experience }: Props) => (
               </h3>
               <p>{title}</p>
             </div>
-            <div className="flex">
+            <div className="flex grow-[3] justify-end">
               <p className="pr-2">{`${formatMonthYear(
                 start
               )} - ${formatMonthYear(end)},`}</p>
@@ -75,7 +75,7 @@ export const WorkExperience = ({ experience }: Props) => (
             </div>
           </div>
           <SectionText className="pb-2">{description}</SectionText>
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap text-center">
             <h4 className="font-semibold pr-2">Skills:</h4>
             <p>{skills.join(", ")}</p>
           </div>
