@@ -35,10 +35,10 @@ export const About = () => (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <SectionText>
         <p className="mb-3">
-          I&apos;m a passionate developer with a focus on delivering outstanding
-          user experiences through web applications. I have worked with
-          technologies such as React and Typescript to create great applications
-          over the past 8 years.
+          I am a passionate developer who focuses on delivering outstanding user
+          experiences through web applications. I have worked with technologies
+          such as React and Typescript to create great applications over the
+          past 8 years.
         </p>
         <p className="mb-3">
           I&apos;ve taken on many roles including leading teams to deliver
