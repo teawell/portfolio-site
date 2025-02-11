@@ -12,11 +12,11 @@ const navItems: NavItem[] = [
   },
   {
     id: "about",
-    description: "About me",
+    description: "About",
   },
   {
     id: "work",
-    description: "Work History",
+    description: "Work",
   },
   {
     id: "contact",
@@ -35,12 +35,12 @@ export const Nav = () => {
   }, [location.hash]);
 
   return (
-    <nav className="flex flex-row-reverse p-6 bg-gray-950 shadow-lg sticky top-0 ">
-      <ul className="inline-flex text-xl/snug mr-12">
+    <nav className="flex p-2 sm:p-6 bg-gray-950 shadow-lg sticky top-0 ">
+      <ul className="flex w-full md:w-auto text-m/snug sm:text-xl/snug sm:mr-12 ">
         {navItems.map(({ id, description }) => (
-          <li key={id}>
+          <li key={id} className="ml-4">
             <NavLink
-              className={`mr-8 ${
+              className={`${
                 hash === `#${id}` ? "text-orange-600" : ""
               } hover:text-orange-500`}
               to={`#${id}`}
