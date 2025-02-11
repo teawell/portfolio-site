@@ -44,8 +44,11 @@ export const Nav = () => {
         const sectionBottom = sectionTop + section.offsetHeight;
 
         if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-          location.hash = `#${section.id}`
-          setHash(`#${section.id}`);
+          const newHash = `#${section.id}`;
+          if (newHash !== hash) {
+            history.replaceState(null, '', newHash)
+            setHash(`#${section.id}`);
+          }
         }
       });
     };
@@ -55,7 +58,7 @@ export const Nav = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [location]);
+  }, [hash, location]);
 
   return (
     <nav className="flex p-2 sm:p-6 bg-gray-950 shadow-lg sticky top-0 ">

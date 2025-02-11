@@ -50,7 +50,7 @@ export const WorkExperience = ({ experience }: Props) => (
       }) => (
         <div key={company} className="mb-8 last:mb-0">
           <div className="flex flex-wrap justify-between pb-2">
-            <div className="flex mr-2">
+            <div className="flex mr-2 text-lg/snug sm:text-xl/snug">
               <h3 className="font-bold pr-2">
                 {companyLink ? (
                   <a
@@ -74,7 +74,7 @@ export const WorkExperience = ({ experience }: Props) => (
               <p>{location}</p>
             </div>
           </div>
-          <SectionText className="pb-2">{description}</SectionText>
+          <SectionText className="pb-2 text-base/snug sm:text-lg/snug">{description}</SectionText>
           <div className="flex flex-wrap text-center">
             <h4 className="font-semibold pr-2">Skills:</h4>
             <p>{skills.join(", ")}</p>

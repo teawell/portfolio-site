@@ -5,7 +5,7 @@ type Props = {
 
 export const SectionText = ({ children, className }: Props) => (
   <div
-    className={`text-l/snug md:text-xl/snug text-balance text-center lg:text-left ${className}`}
+    className={`text-lg/snug sm:text-xl/snug text-balance text-center lg:text-left ${className}`}
   >
     {children}
   </div>

@@ -8,20 +8,26 @@ export const Hero = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const textOneRef = useRef<HTMLDivElement>(null);
   const textTwoRef = useRef<HTMLDivElement>(null);
+  const animationRequestFrameId = useRef<number | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
       const context = canvas.getContext("2d");
       if (context) {
-        const animationRequestFrameId = initializeParticles(canvas, context, [
-          buttonRef,
-          textOneRef,
-          textTwoRef,
-        ]);
+        const timeoutId = setTimeout(() => {
+          animationRequestFrameId.current = initializeParticles(
+            canvas,
+            context,
+            [buttonRef, textOneRef, textTwoRef]
+          );
+        }, 2000);
 
         return () => {
-          cancelAnimationFrame(animationRequestFrameId);
+          clearTimeout(timeoutId);
+          if (animationRequestFrameId.current) {
+            cancelAnimationFrame(animationRequestFrameId.current);
+          }
         };
       }
     }
@@ -33,7 +39,7 @@ export const Hero = () => {
       className="flex h-screen items-center justify-center relative"
     >
       <canvas
-      aria-label="Background bouncing particle effect"
+        aria-label="Background bouncing particle effect"
         ref={canvasRef}
         className="absolute top-0 bottom-0 left-0 right-0 h-full w-full  bg-gradient-to-b from-sky-900  via-slate-800 via-40% to-gray-900"
       />
@@ -60,7 +66,7 @@ export const Hero = () => {
           >
             <button
               ref={buttonRef}
-              className="text-orange-600 flex text-l justify-center items-center border-solid border-2 border-orange-600 py-2 px-6 rounded-md hover:border-orange-500 hover:text-orange-500 group transition"
+              className="text-orange-600 flex text-lg justify-center items-center border-solid border-2 border-orange-600 py-2 px-6 rounded-md hover:border-orange-500 hover:text-orange-500 group transition"
             >
               <p className="mr-2">Learn more</p>
               <ArrowUp className="fill-orange-600 rotate-90 group-hover:rotate-180 group-hover:fill-orange-500 transition" />
