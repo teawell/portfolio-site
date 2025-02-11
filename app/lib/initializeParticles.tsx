@@ -7,6 +7,16 @@ const generateParticles = (
   context: CanvasRenderingContext2D,
   boundingBoxesToAvoid: HTMLElement[]
 ): Particle[] => {
+  // look up the size the canvas is being displayed
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+
+  // If it's resolution does not match change it
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
+
   return new Array(amount).fill("").map(() => {
     return new Particle(
       Math.random() * canvas.width,
@@ -17,7 +27,7 @@ const generateParticles = (
       -0.5 + Math.random(),
       canvas,
       context,
-      boundingBoxesToAvoid,
+      boundingBoxesToAvoid
     );
   });
 };
