@@ -28,7 +28,7 @@ export const Hero = () => {
   }, [canvasRef]);
 
   return (
-    <div
+    <section
       id="home"
       className="flex h-screen items-center justify-center relative"
     >
@@ -68,6 +68,6 @@ export const Hero = () => {
           </NavLink>
         </header>
       </div>
-    </div>
+    </section>
   );
 };

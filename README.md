@@ -42,12 +42,9 @@ This template comes with [Tailwind CSS](https://tailwindcss.com/) already config
 
 ## TODO
 - Scroll down bounding box
-- Font size on mobile
 - Number of bubbles per screen size
 - Contact section
 - Footer
-- Font
 - Load more for skills on mobile
 - Re-order skills in order of importance, maybe add logos for key skills
 - Redesign skill pills, add hover?
-- Auto update menu item based on scroll position

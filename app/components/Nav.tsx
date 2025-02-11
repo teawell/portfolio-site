@@ -34,6 +34,29 @@ export const Nav = () => {
     setHash(location.hash);
   }, [location.hash]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll<HTMLElement>("section[id]");
+      const scrollPosition = window.scrollY;
+
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop - 140;
+        const sectionBottom = sectionTop + section.offsetHeight;
+
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+          location.hash = `#${section.id}`
+          setHash(`#${section.id}`);
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [location]);
+
   return (
     <nav className="flex p-2 sm:p-6 bg-gray-950 shadow-lg sticky top-0 ">
       <ul className="flex w-full md:w-auto text-m/snug sm:text-xl/snug sm:mr-12 ">
