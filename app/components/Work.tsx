@@ -19,6 +19,7 @@ const experience: Experience[] = [
       "Turborepo",
       "Jest",
       "Tailwind",
+      "React Query",
       "HTML",
       "Vercel",
       "GIT",

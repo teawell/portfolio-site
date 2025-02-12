@@ -4,27 +4,27 @@ import { SectionText } from "./SectionText";
 import { SectionTitle } from "./SectionTitle";
 
 const skills = [
-  "Javascript",
   "Typescript",
   "React",
   "Next.js",
-  "Redux",
+  "Javascript",
   "Storybook",
   "React Query",
-  "Cypress",
   "Jest",
-  "Enzyme",
-  "CSS",
-  "SASS",
+  "Cypress",
   "Tailwind",
-  "NX",
+  "SASS",
+  "CSS",
   "TurboRepo",
+  "NX",
   "GIT",
   "HTML",
   "React Intl",
   "Webpack",
   "CI/CD",
   "Docker",
+  "Redux",
+  "Enzyme",
 ];
 
 export const About = () => (
