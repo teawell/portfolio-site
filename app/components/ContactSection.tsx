@@ -14,39 +14,37 @@ export const ContactSection = () => (
           Have a question or want to work together?
         </p>
         <p className="text-center mb-3">
-            Reach out on LinkedIn or checkout more of my work on Github.
+          Reach out on LinkedIn or checkout more of my work on Github.
         </p>
       </SectionText>
-      <Link
-        to="https://www.linkedin.com/in/jonathan-teawell/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex mb-3"
-      >
-        <img
-          src={linkedIn}
-          alt="LinkedIn logo"
-          height={25}
-          width={25}
-          className="mr-2"
-        />
-        <p className="hover:text-orange-500">LinkedIn</p>
-      </Link>
-      <Link
-        to="https://github.com/teawell"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex"
-      >
-        <img
-          src={github}
-          alt="Github logo"
-          height={25}
-          width={25}
-          className="mr-2"
-        />
-        <p className="hover:text-orange-500">Github</p>
-      </Link>
+      <div className="flex gap-6">
+        <Link
+          to="https://www.linkedin.com/in/jonathan-teawell/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex mb-3"
+        >
+          <img
+            src={linkedIn}
+            alt="LinkedIn logo"
+            className="mr-2 w-full h-6"
+          />
+          <p className="hover:text-orange-500">LinkedIn</p>
+        </Link>
+        <Link
+          to="https://github.com/teawell"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex"
+        >
+          <img
+            src={github}
+            alt="Github logo"
+            className="mr-2 w-full h-6"
+          />
+          <p className="hover:text-orange-500">Github</p>
+        </Link>
+      </div>
     </div>
   </Section>
 );
