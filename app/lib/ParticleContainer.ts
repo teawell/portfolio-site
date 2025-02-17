@@ -13,6 +13,7 @@ export class ParticleContainer {
   private htmlElementsToAvoid: HTMLElement[];
   private animationRequestFrameId?: number;
   private isVisible: boolean = false;
+  private maxNumberOfParticles: number;
 
   constructor({ canvas, context, htmlElementsToAvoid }: Props) {
     // look up the size the canvas is being displayed
@@ -28,10 +29,11 @@ export class ParticleContainer {
     this.canvas = canvas;
     this.context = context;
     this.htmlElementsToAvoid = htmlElementsToAvoid;
-    const particlesToProduce = Math.floor(this.canvas.width/10) 
-    
+    const particlesToProduce = Math.floor(this.canvas.width / 10);
+    this.maxNumberOfParticles =
+      particlesToProduce < 100 ? particlesToProduce : 100;
 
-    this.particles = new Array(particlesToProduce).fill("").map(() => {
+    this.particles = new Array(this.maxNumberOfParticles).fill("").map(() => {
       return new Particle(
         Math.random() * canvas.width,
         Math.random() * canvas.height,
