@@ -13,6 +13,7 @@ export class ParticleContainer {
   private context: CanvasRenderingContext2D;
   private htmlElementsToAvoid: HTMLElement[];
   private animationRequestFrameId?: number;
+  private isVisible: boolean = false;
 
   constructor({
     numberOfParticles,
@@ -57,7 +58,11 @@ export class ParticleContainer {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.particles.forEach((particle) => particle.animate());
 
-    this.animationRequestFrameId = requestAnimationFrame(() => this.animate());
+    if (this.isVisible) {
+      this.animationRequestFrameId = requestAnimationFrame(() =>
+        this.animate()
+      );
+    }
   }
 
   getRequestFrameId() {
@@ -80,5 +85,13 @@ export class ParticleContainer {
 
   getHtmlElementsToAvoid() {
     return this.htmlElementsToAvoid;
+  }
+
+  setIsCanvasVisible(isVisible: boolean) {
+    this.isVisible = isVisible;
+
+    if (this.isVisible) {
+      this.animate();
+    }
   }
 }
