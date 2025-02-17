@@ -4,21 +4,21 @@ type Props = {
   numberOfParticles: number;
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
-  htmlElementToAvoid: HTMLElement[];
+  htmlElementsToAvoid: HTMLElement[];
 };
 
 export class ParticleContainer {
-  particles: Particle[];
-  canvas: HTMLCanvasElement;
-  context: CanvasRenderingContext2D;
-  htmlElementToAvoid: HTMLElement[];
-  animationRequestFrameId?: number;
+  private particles: Particle[];
+  private canvas: HTMLCanvasElement;
+  private context: CanvasRenderingContext2D;
+  private htmlElementsToAvoid: HTMLElement[];
+  private animationRequestFrameId?: number;
 
   constructor({
     numberOfParticles,
     canvas,
     context,
-    htmlElementToAvoid,
+    htmlElementsToAvoid,
   }: Props) {
     // look up the size the canvas is being displayed
     const width = canvas.clientWidth;
@@ -32,7 +32,7 @@ export class ParticleContainer {
 
     this.canvas = canvas;
     this.context = context;
-    this.htmlElementToAvoid = htmlElementToAvoid;
+    this.htmlElementsToAvoid = htmlElementsToAvoid;
     this.particles = new Array(numberOfParticles).fill("").map(() => {
       return new Particle(
         Math.random() * canvas.width,
@@ -41,21 +41,19 @@ export class ParticleContainer {
         Math.random() * (0.7 - 0.3) + 0.3,
         -0.5 + Math.random(),
         -0.5 + Math.random(),
-        canvas,
-        context,
-        htmlElementToAvoid
+        this
       );
     });
 
     this.init();
   }
 
-  init() {
+  private init() {
     this.particles.forEach((particle) => particle.create());
     this.animate();
   }
 
-  animate() {
+  private animate() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.particles.forEach((particle) => particle.animate());
 
@@ -66,8 +64,21 @@ export class ParticleContainer {
     return this.animationRequestFrameId;
   }
 
-  updateOnReSize() {
-    this.canvas.width = document.body.scrollWidth;
-    this.canvas.height = window.innerHeight;
+  updateOnReSize(canvas: HTMLCanvasElement) {
+    canvas.width = document.body.scrollWidth;
+    canvas.height = window.innerHeight;
+    this.canvas = canvas;
+  }
+
+  getContext() {
+    return this.context;
+  }
+
+  getCanvas() {
+    return this.canvas;
+  }
+
+  getHtmlElementsToAvoid() {
+    return this.htmlElementsToAvoid;
   }
 }

@@ -6,7 +6,7 @@ export const initializeParticles = (
   context: CanvasRenderingContext2D,
   areasToAvoidRefs: RefObject<HTMLElement>[]
 ) => {
-  const htmlElementToAvoid: HTMLElement[] = areasToAvoidRefs
+  const htmlElementsToAvoid: HTMLElement[] = areasToAvoidRefs
     .map((item: RefObject<HTMLElement>) =>
       item && item.current ? item.current : null
     )
@@ -16,10 +16,10 @@ export const initializeParticles = (
     numberOfParticles: 101,
     canvas,
     context,
-    htmlElementToAvoid,
+    htmlElementsToAvoid,
   });
 
-  addEventListener("resize", particleContainer.updateOnReSize);
+  addEventListener("resize", () => particleContainer.updateOnReSize(canvas));
 
   return particleContainer;
 };

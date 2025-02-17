@@ -25,8 +25,6 @@ export const HeroSection = () => {
           if (requestFrameId) {
             cancelAnimationFrame(requestFrameId);
           }
-
-          removeEventListener("resize", particleContainer.updateOnReSize);
         };
       }
     }
