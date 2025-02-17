@@ -61,7 +61,7 @@ export const Nav = () => {
   }, [hash, location]);
 
   return (
-    <nav className="flex p-2 sm:p-6 bg-gray-950 shadow-lg sticky top-0 ">
+    <nav className="flex p-2 sm:p-6 bg-gray-950 shadow-lg sticky top-0 z-10">
       <ul className="flex w-full md:w-auto text-m/snug sm:text-xl/snug sm:mr-12 ">
         {navItems.map(({ id, description }) => (
           <li key={id} className="ml-4">
