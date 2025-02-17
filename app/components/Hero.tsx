@@ -58,7 +58,7 @@ export const Hero = () => {
 
           <NavLink
             to="#about"
-            className="mb-12 animate-fade-up animate-once animate-delay-[1600ms] animate-duration-[1400ms]"
+            className="mb-16 animate-fade-up animate-once animate-delay-[1600ms] animate-duration-[1400ms]"
           >
             <button
               ref={buttonRef}
