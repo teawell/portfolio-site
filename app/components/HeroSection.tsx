@@ -3,7 +3,7 @@ import { initializeParticles } from "~/lib/initializeParticles";
 import { ArrowUp } from "./svgs/ArrowUp";
 import { NavLink } from "@remix-run/react";
 
-export const Hero = () => {
+export const HeroSection = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const textOneRef = useRef<HTMLDivElement>(null);

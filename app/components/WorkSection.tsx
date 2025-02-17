@@ -194,7 +194,7 @@ const experience: Experience[] = [
   },
 ];
 
-export const Work = () => (
+export const WorkSection = () => (
   <Section id="work">
     <SectionTitle>Work</SectionTitle>
     <WorkExperience experience={experience} />

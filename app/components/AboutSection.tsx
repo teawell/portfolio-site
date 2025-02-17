@@ -27,7 +27,7 @@ const skills = [
   "Enzyme",
 ];
 
-export const About = () => (
+export const AboutSection = () => (
   <Section id="about">
     <SectionTitle>About</SectionTitle>
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

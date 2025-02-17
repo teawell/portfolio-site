@@ -5,7 +5,7 @@ import linkedIn from "../images/linkedin.png";
 import github from "../images/github.png";
 import { Link } from "@remix-run/react";
 
-export const Contact = () => (
+export const ContactSection = () => (
   <Section id="contact">
     <SectionTitle>Contact</SectionTitle>
     <div className="flex flex-col justify-center items-center">

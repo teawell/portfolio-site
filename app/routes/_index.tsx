@@ -1,9 +1,9 @@
-import { json, redirect, type ActionFunctionArgs, type MetaFunction } from "@remix-run/node";
-import { About } from "~/components/About";
-import { Contact } from "~/components/Contact";
-import { Hero } from "~/components/Hero";
+import { type MetaFunction } from "@remix-run/node";
+import { AboutSection } from "~/components/AboutSection";
+import { ContactSection } from "~/components/ContactSection";
+import { HeroSection } from "~/components/HeroSection";
 import { Nav } from "~/components/Nav";
-import { Work } from "~/components/Work";
+import { WorkSection } from "~/components/WorkSection";
 
 export const meta: MetaFunction = () => {
   return [
@@ -15,11 +15,11 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div>
-      <Hero />
+      <HeroSection />
       <Nav />
-      <About />
-      <Work />
-      <Contact />
+      <AboutSection />
+      <WorkSection />
+      <ContactSection />
     </div>
   );
 }
