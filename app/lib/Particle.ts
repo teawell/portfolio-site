@@ -1,3 +1,5 @@
+import { ParticleContainer } from "./ParticleContainer";
+
 export class Particle {
   x: number;
   y: number;
@@ -5,9 +7,7 @@ export class Particle {
   fade: number;
   xSpeed: number;
   ySpeed: number;
-  canvas: HTMLCanvasElement;
-  context: CanvasRenderingContext2D;
-  boundingBoxesToAvoid: HTMLElement[];
+  parent: ParticleContainer;
 
   isColliding(boxElement: HTMLElement) {
     const box = boxElement.getBoundingClientRect();
@@ -26,9 +26,7 @@ export class Particle {
     fade: number,
     xSpeed: number,
     ySpeed: number,
-    canvas: HTMLCanvasElement,
-    context: CanvasRenderingContext2D,
-    boundingBoxesToAvoid: HTMLElement[],
+    parent: ParticleContainer
   ) {
     this.x = x;
     this.y = y;
@@ -36,12 +34,13 @@ export class Particle {
     this.fade = fade;
     this.xSpeed = xSpeed;
     this.ySpeed = ySpeed;
-    this.canvas = canvas;
-    this.context = context;
-    this.boundingBoxesToAvoid = boundingBoxesToAvoid;
+    this.parent = parent;
+
+    const canvas = this.parent.getCanvas();
+    const htmlElementsToAvoid = this.parent.getHtmlElementsToAvoid();
 
     const regenerateIfCollision = () => {
-      const isColliding = this.boundingBoxesToAvoid.some((box) =>
+      const isColliding = htmlElementsToAvoid.some((box) =>
         this.isColliding(box)
       );
 
@@ -55,27 +54,31 @@ export class Particle {
   }
 
   create() {
-    this.context.filter = `blur(1px)`;
-    this.context.beginPath();
-    this.context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    this.context.fillStyle = `rgba(0,150,256,${this.fade})`;
-    this.context.fill();
-    this.context.closePath();
+    const context = this.parent.getContext();
+    context.filter = `blur(1px)`;
+    context.beginPath();
+    context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    context.fillStyle = `rgba(0,150,256,${this.fade})`;
+    context.fill();
+    context.closePath();
   }
 
   animate() {
+    const canvas = this.parent.getCanvas();
+    const htmlElementsToAvoid = this.parent.getHtmlElementsToAvoid();
+
     // Check for canvas boundaries
-    if (this.y - this.radius < 0 || this.y + this.radius > this.canvas.height) {
+    if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
       this.ySpeed = -this.ySpeed;
     } else if (
       this.x - this.radius < 0 ||
-      this.x + this.radius > this.canvas.width
+      this.x + this.radius > canvas.width
     ) {
       this.xSpeed = -this.xSpeed;
     }
 
     // Check for collision with HTML elements
-    const collidingItem = this.boundingBoxesToAvoid.find((box) =>
+    const collidingItem = htmlElementsToAvoid.find((box) =>
       this.isColliding(box)
     );
 
@@ -99,9 +102,5 @@ export class Particle {
     this.x += this.xSpeed;
     this.y += this.ySpeed;
     this.create();
-  }
-
-  updateOnReSize(canvas: HTMLCanvasElement) {
-    this.canvas = canvas;
   }
 }

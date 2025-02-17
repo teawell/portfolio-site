@@ -2,30 +2,46 @@ import { useRef, useEffect } from "react";
 import { initializeParticles } from "~/lib/initializeParticles";
 import { ArrowUp } from "./svgs/ArrowUp";
 import { NavLink } from "@remix-run/react";
+import { ParticleContainer } from "~/lib/ParticleContainer";
+import { useIsVisible } from "~/lib/useIsVisible";
 
 export const HeroSection = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const textOneRef = useRef<HTMLDivElement>(null);
   const textTwoRef = useRef<HTMLDivElement>(null);
+  const particleContainer = useRef<ParticleContainer>();
+  const isCanvasVisible = useIsVisible(canvasRef);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
       const context = canvas.getContext("2d");
       if (context) {
-        const animationRequestFrameId = initializeParticles(canvas, context, [
+        particleContainer.current = initializeParticles(canvas, context, [
           buttonRef,
           textOneRef,
           textTwoRef,
         ]);
 
         return () => {
-          cancelAnimationFrame(animationRequestFrameId);
+          if (particleContainer.current) {
+            const requestFrameId =
+              particleContainer.current.getRequestFrameId();
+            if (requestFrameId) {
+              cancelAnimationFrame(requestFrameId);
+            }
+          }
         };
       }
     }
   }, [canvasRef]);
+
+  useEffect(() => {
+    if (particleContainer.current) {
+      particleContainer.current.setIsCanvasVisible(isCanvasVisible);
+    }
+  }, [isCanvasVisible]);
 
   return (
     <section
@@ -36,8 +52,6 @@ export const HeroSection = () => {
         aria-label="Background bouncing particle effect"
         ref={canvasRef}
         className="absolute top-0 bottom-0 left-0 right-0 h-full w-full  bg-gradient-to-b from-sky-900  via-slate-800 via-40% to-gray-900"
-        height={canvasRef.current?.getBoundingClientRect().height}
-        width={canvasRef.current?.getBoundingClientRect().width}
       />
       <div className="flex flex-col items-center relative h-full sm:h-auto">
         <header className="flex flex-col items-center sm:gap-9 text-center h-full">
