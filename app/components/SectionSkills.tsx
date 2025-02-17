@@ -20,7 +20,7 @@ const skills = [
 ];
 
 export const SectionSkills = ({ className }: Props) => (
-  <div className={`grid grid-flow-col grid-rows-3 sm:grid-rows-2 gap-y-4 ${className}`}>
+  <div className={`grid grid-flow-col grid-rows-2 gap-y-4 ${className}`}>
     {skills.map((skill) => (
       <Skill key={skill.title} skill={skill} />
     ))}
