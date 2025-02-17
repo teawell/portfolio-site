@@ -1,7 +1,6 @@
 import { Particle } from "./Particle";
 
 type Props = {
-  numberOfParticles: number;
   canvas: HTMLCanvasElement;
   context: CanvasRenderingContext2D;
   htmlElementsToAvoid: HTMLElement[];
@@ -15,12 +14,7 @@ export class ParticleContainer {
   private animationRequestFrameId?: number;
   private isVisible: boolean = false;
 
-  constructor({
-    numberOfParticles,
-    canvas,
-    context,
-    htmlElementsToAvoid,
-  }: Props) {
+  constructor({ canvas, context, htmlElementsToAvoid }: Props) {
     // look up the size the canvas is being displayed
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
@@ -34,7 +28,10 @@ export class ParticleContainer {
     this.canvas = canvas;
     this.context = context;
     this.htmlElementsToAvoid = htmlElementsToAvoid;
-    this.particles = new Array(numberOfParticles).fill("").map(() => {
+    const particlesToProduce = Math.floor(this.canvas.width/10) 
+    
+
+    this.particles = new Array(particlesToProduce).fill("").map(() => {
       return new Particle(
         Math.random() * canvas.width,
         Math.random() * canvas.height,

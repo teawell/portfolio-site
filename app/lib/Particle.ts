@@ -36,18 +36,21 @@ export class Particle {
     this.ySpeed = ySpeed;
     this.parent = parent;
 
-    // const regenerateIfCollision = () => {
-    //   const isColliding = this.boundingBoxesToAvoid.some((box) =>
-    //     this.isColliding(box)
-    //   );
+    const canvas = this.parent.getCanvas();
+    const htmlElementsToAvoid = this.parent.getHtmlElementsToAvoid();
 
-    //   if (isColliding) {
-    //     this.x = Math.random() * canvas.width;
-    //     this.y = Math.random() * canvas.height;
-    //     regenerateIfCollision();
-    //   }
-    // };
-    // regenerateIfCollision();
+    const regenerateIfCollision = () => {
+      const isColliding = htmlElementsToAvoid.some((box) =>
+        this.isColliding(box)
+      );
+
+      if (isColliding) {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        regenerateIfCollision();
+      }
+    };
+    regenerateIfCollision();
   }
 
   create() {

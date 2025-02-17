@@ -13,7 +13,6 @@ export const initializeParticles = (
     .filter((item) => item !== null);
 
   const particleContainer = new ParticleContainer({
-    numberOfParticles: 101,
     canvas,
     context,
     htmlElementsToAvoid,
