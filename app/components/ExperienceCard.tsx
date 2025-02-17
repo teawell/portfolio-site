@@ -1,4 +1,5 @@
-import { SectionText } from "./SectionText";
+import { useEffect, useRef, useState } from "react";
+import { useIsVisible } from "~/lib/useIsVisible";
 
 export type Experience = {
   start: Date;
@@ -13,6 +14,7 @@ export type Experience = {
 
 type Props = {
   experience: Experience;
+  isOdd: boolean;
 };
 
 const formatMonthYear = (date: Date) => {
@@ -46,35 +48,53 @@ export const ExperienceCard = ({
     companyLink,
     skills,
   },
-}: Props) => (
-  <>
-    <div className="flex flex-wrap justify-between pb-2">
-      <div className="flex mr-2 text-lg/snug sm:text-xl/snug">
-        <h3 className="font-bold pr-2">
-          {companyLink ? (
-            <a href={companyLink} target="_blank" rel="noopener noreferrer">
-              {company}
-            </a>
-          ) : (
-            company
-          )}
-          ,
-        </h3>
-        <p>{title}</p>
+  isOdd,
+}: Props) => {
+  const experienceRef = useRef<HTMLDivElement>(null);
+  const isExperienceVisible = useIsVisible(experienceRef, { threshold: 0.5 });
+  const fadeType = isOdd ? "animate-fade-left" : "animate-fade-right";
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    if (isExperienceVisible) {
+      setHasAnimated(true);
+    }
+  }, [isExperienceVisible]);
+
+  return (
+    <div
+      ref={experienceRef}
+      className={`bg-gray-800 rounded-lg animate-once animate-duration-[600ms] ${
+        hasAnimated ? fadeType : "opacity-0"
+      }`}
+    >
+      <div className="flex flex-wrap justify-between py-3 px-4 border-b-2 border-gray-900">
+        <div className="flex mr-2 flex-wrap text-base/snug sm:text-lg/snug">
+          <h3 className="font-bold pr-2">
+            {companyLink ? (
+              <a href={companyLink} target="_blank" rel="noopener noreferrer">
+                {company}
+              </a>
+            ) : (
+              company
+            )}
+          </h3>
+          <p>{title}</p>
+        </div>
+        <div className="flex grow-[3] justify-end">
+          <p className="pr-2">{`${formatMonthYear(start)} - ${formatMonthYear(
+            end
+          )},`}</p>
+          <p>{location}</p>
+        </div>
       </div>
-      <div className="flex grow-[3] justify-end">
-        <p className="pr-2">{`${formatMonthYear(start)} - ${formatMonthYear(
-          end
-        )},`}</p>
-        <p>{location}</p>
+      <p className="py-3 px-4 text-base/snug border-b-2 border-gray-900">
+        {description}
+      </p>
+      <div className="py-3 px-4">
+        <h4 className="font-semibold">Skills:</h4>
+        <p>{skills.join(", ")}</p>
       </div>
     </div>
-    <SectionText className="pb-2 text-base/snug sm:text-lg/snug">
-      {description}
-    </SectionText>
-    <div className="flex flex-wrap text-center">
-      <h4 className="font-semibold pr-2">Skills:</h4>
-      <p>{skills.join(", ")}</p>
-    </div>
-  </>
-);
+  );
+};
