@@ -1,6 +1,7 @@
+import { Experience } from "./ExperienceCard";
 import { Section } from "./Section";
 import { SectionTitle } from "./SectionTitle";
-import { Experience, WorkExperience } from "./WorkExperience";
+import { WorkExperience } from "./WorkExperience";
 
 const experiences: Experience[] = [
   {
@@ -17,6 +18,7 @@ const experiences: Experience[] = [
       "React",
       "Typescript",
       "Turborepo",
+      "Playwright",
       "Jest",
       "Tailwind",
       "React Query",

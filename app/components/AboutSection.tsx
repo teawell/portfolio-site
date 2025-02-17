@@ -3,35 +3,12 @@ import { SectionSkills } from "./SectionSkills";
 import { SectionText } from "./SectionText";
 import { SectionTitle } from "./SectionTitle";
 
-const skills = [
-  "Typescript",
-  "React",
-  "Next.js",
-  "Javascript",
-  "Storybook",
-  "React Query",
-  "Jest",
-  "Cypress",
-  "Tailwind",
-  "SASS",
-  "CSS",
-  "TurboRepo",
-  "NX",
-  "GIT",
-  "HTML",
-  "React Intl",
-  "Webpack",
-  "CI/CD",
-  "Docker",
-  "Redux",
-  "Enzyme",
-];
 
 export const AboutSection = () => (
   <Section id="about">
     <SectionTitle>About</SectionTitle>
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <SectionText>
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_2px_1fr] gap-4 lg:gap-8 bg-gray-800 rounded-lg">
+      <SectionText className="pt-3 lg:py-3 lg:pl-4 lg:pr-0 px-4">
         <p className="mb-3">
           I am a passionate developer who focuses on delivering outstanding user
           experiences through web applications. I have worked with technologies
@@ -49,7 +26,8 @@ export const AboutSection = () => (
           permeate these qualities throughout the team.
         </p>
       </SectionText>
-      <SectionSkills skills={skills} />
+      <div className="h-full w-full bg-gray-900 min-h-1"></div>
+      <SectionSkills className="pb-3 lg:py-3 lg:pr-4 lg:pl-0 px-4" />
     </div>
   </Section>
 );

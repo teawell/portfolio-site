@@ -52,7 +52,7 @@ export const HeroSection = () => {
               ref={textTwoRef}
               className="px-4 animate-fade-left animate-once animate-delay-[1200ms]"
             >
-              I&apos;m a frontend web developer.
+              I&apos;m a web developer.
             </div>
           </h1>
 

@@ -1,9 +1,19 @@
 type Props = {
-  skill: string;
+  skill: {
+    title: string;
+    image: string;
+  };
 };
 
-export const Skill = ({ skill }: Props) => (
-  <div className="mx-auto border border-orange-500 p-2 rounded-full text-center min-w-60 max-w-32 sm:mx-0 sm:min-w-28 max-h-12">
-    {skill}
+export const Skill = ({ skill: { title, image } }: Props) => (
+  <div className="p-2 rounded-lg text-center flex-shrink-0">
+    <div className="flex justify-center">
+      <img
+        src={image}
+        alt={`${title} logo`}
+        className="w-auto h-24 pb-2"
+      />
+    </div>
+    <p className="text-base/snug">{title}</p>
   </div>
 );

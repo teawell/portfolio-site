@@ -43,7 +43,4 @@ This template comes with [Tailwind CSS](https://tailwindcss.com/) already config
 ## TODO
 - Scroll down bounding box
 - Number of bubbles per screen size
-- Load more for skills on mobile
-- Re-order skills in order of importance, maybe add logos for key skills
-- Redesign skill pills, add hover?
 - Refactor canvas animation
