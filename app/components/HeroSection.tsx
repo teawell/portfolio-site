@@ -14,14 +14,19 @@ export const HeroSection = () => {
     if (canvas) {
       const context = canvas.getContext("2d");
       if (context) {
-        const animationRequestFrameId = initializeParticles(canvas, context, [
+        const particleContainer = initializeParticles(canvas, context, [
           buttonRef,
           textOneRef,
           textTwoRef,
         ]);
 
         return () => {
-          cancelAnimationFrame(animationRequestFrameId);
+          const requestFrameId = particleContainer.getRequestFrameId();
+          if (requestFrameId) {
+            cancelAnimationFrame(requestFrameId);
+          }
+
+          removeEventListener("resize", particleContainer.updateOnReSize);
         };
       }
     }
@@ -36,8 +41,6 @@ export const HeroSection = () => {
         aria-label="Background bouncing particle effect"
         ref={canvasRef}
         className="absolute top-0 bottom-0 left-0 right-0 h-full w-full  bg-gradient-to-b from-sky-900  via-slate-800 via-40% to-gray-900"
-        height={canvasRef.current?.getBoundingClientRect().height}
-        width={canvasRef.current?.getBoundingClientRect().width}
       />
       <div className="flex flex-col items-center relative h-full sm:h-auto">
         <header className="flex flex-col items-center sm:gap-9 text-center h-full">
