@@ -2,7 +2,7 @@ import { Section } from "./Section";
 import { SectionTitle } from "./SectionTitle";
 import { Experience, WorkExperience } from "./WorkExperience";
 
-const experience: Experience[] = [
+const experiences: Experience[] = [
   {
     start: new Date("2023/02/01"),
     end: new Date("2023/10/01"),
@@ -197,6 +197,6 @@ const experience: Experience[] = [
 export const WorkSection = () => (
   <Section id="work">
     <SectionTitle>Work</SectionTitle>
-    <WorkExperience experience={experience} />
+    <WorkExperience experiences={experiences} />
   </Section>
 );
