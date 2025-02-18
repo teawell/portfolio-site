@@ -57,6 +57,20 @@ export class ParticleContainer {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.particles.forEach((particle) => particle.animate());
 
+    if (process.env.NODE_ENV === "development") {
+      this.context.filter = "blur(0)";
+      this.context.strokeStyle = "red";
+      this.htmlElementsToAvoid.forEach((element) => {
+        const bounding = element.getBoundingClientRect();
+        this.context.strokeRect(
+          bounding.x,
+          bounding.y + window.scrollY,
+          bounding.width,
+          bounding.height
+        );
+      });
+    }
+
     if (this.isVisible) {
       this.animationRequestFrameId = requestAnimationFrame(() =>
         this.animate()
