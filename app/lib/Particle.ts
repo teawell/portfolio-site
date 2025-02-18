@@ -111,14 +111,32 @@ export class Particle {
       this.xSpeed,
       0,
       canvas.clientWidth
-    );    
+    );
 
     if (
       nextVerticalCollision.nextCollision ===
       nextHorizontalCollision.nextCollision
     ) {
       this.nextCollision = nextVerticalCollision.nextCollision;
-      // TODO: case statement for all possible options
+      // Check which of the corners will be hit
+      if (
+        nextVerticalCollision.positiveAxis &&
+        nextHorizontalCollision.positiveAxis
+      ) {
+        this.nextCollisionAxis = CollisionAxis.BottomRight;
+      } else if (
+        nextVerticalCollision.positiveAxis &&
+        !nextHorizontalCollision.positiveAxis
+      ) {
+        this.nextCollisionAxis = CollisionAxis.BottomLeft;
+      } else if (
+        !nextVerticalCollision.positiveAxis &&
+        nextHorizontalCollision.positiveAxis
+      ) {
+        this.nextCollisionAxis = CollisionAxis.TopRight;
+      } else {
+        this.nextCollisionAxis = CollisionAxis.TopLeft;
+      }
     } else if (
       nextVerticalCollision.nextCollision <
       nextHorizontalCollision.nextCollision
@@ -133,7 +151,7 @@ export class Particle {
         ? CollisionAxis.Right
         : CollisionAxis.Left;
     }
- }
+  }
 
   animate() {
     const canvas = this.parent.getCanvas();
@@ -168,38 +186,15 @@ export class Particle {
       this.x += this.xSpeed;
       this.y += this.ySpeed;
       this.create();
-      // Check for canvas boundaries and update speed
-      // if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
-      //   this.ySpeed = -this.ySpeed;
-      // } else if (
-      //   this.x - this.radius < 0 ||
-      //   this.x + this.radius > canvas.width
-      // ) {
-      //   this.xSpeed = -this.xSpeed;
-      // }
 
       this.calculateNextCollision();
     } else {
-      // console.log("collision", this.nextCollision);
-
-
       this.nextCollision -= 1;
-      
+
       this.x += this.xSpeed;
       this.y += this.ySpeed;
       this.create();
     }
-
-    // Check for canvas boundaries
-    // if (this.y - this.radius < 0 || this.y + this.radius > canvas.height) {
-    //   this.ySpeed = -this.ySpeed;
-    // } else if (
-    //   this.x - this.radius < 0 ||
-    //   this.x + this.radius > canvas.width
-    // ) {
-    //   this.xSpeed = -this.xSpeed;
-    // }
-
     // Check for collision with HTML elements
     // const collidingItem = htmlElementsToAvoid.find((box) =>
     //   this.isColliding(box)
@@ -220,10 +215,5 @@ export class Particle {
     //     this.xSpeed = -this.xSpeed;
     //   }
     // }
-
-    // // Update speed
-    // this.x += this.xSpeed;
-    // this.y += this.ySpeed;
-    // this.create();
   }
 }
