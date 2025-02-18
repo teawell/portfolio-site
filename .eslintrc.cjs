@@ -80,5 +80,12 @@ module.exports = {
         node: true,
       },
     },
+
+    // Custom
+    {
+      rules: {
+        "no-case-declarations": 0,
+      },
+    },
   ],
 };
