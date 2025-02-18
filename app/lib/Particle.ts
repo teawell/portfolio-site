@@ -9,20 +9,29 @@ enum CollisionAxis {
   BottomLeft,
   Left,
   TopLeft,
+  Deferred,
+}
+
+enum PreviousCollisionAxis {
+  Vertical,
+  Horizontal,
+  None,
 }
 
 export class Particle {
-  x: number;
-  y: number;
-  radius: number;
-  fade: number;
-  xSpeed: number;
-  ySpeed: number;
-  parent: ParticleContainer;
-  nextCollision: number = 0;
-  nextCollisionAxis?: CollisionAxis;
+  private x: number;
+  private y: number;
+  private radius: number;
+  private fade: number;
+  private xSpeed: number;
+  private ySpeed: number;
+  private parent: ParticleContainer;
+  private nextCollision: number = 0;
+  private nextCollisionAxis: CollisionAxis = CollisionAxis.Deferred;
+  private previousCollisionAxis: PreviousCollisionAxis =
+    PreviousCollisionAxis.None;
 
-  isColliding(boxElement: HTMLElement) {
+  private isColliding(boxElement: HTMLElement) {
     const box = boxElement.getBoundingClientRect();
     const isWithinVerticalSpace =
       this.y > box.top - this.radius && this.y < box.bottom + this.radius;
@@ -45,8 +54,8 @@ export class Particle {
     this.y = y;
     this.radius = radius;
     this.fade = fade;
-    this.xSpeed = xSpeed;
-    this.ySpeed = ySpeed;
+    this.xSpeed = xSpeed * 5;
+    this.ySpeed = ySpeed * 5;
     this.parent = parent;
 
     const canvas = this.parent.getCanvas();
@@ -76,7 +85,7 @@ export class Particle {
     context.closePath();
   }
 
-  calculateMovesTillCollision(
+  private calculateMovesTillScreenCollision(
     coord: number,
     speed: number,
     minCoord: number,
@@ -93,20 +102,15 @@ export class Particle {
     return { nextCollision, positiveAxis: speed > 0 };
   }
 
-  calculateNextCollision() {
+  private calculateCanvasEdgeCollision() {
     const canvas = this.parent.getCanvas();
-    const htmlElementsToAvoid = this.parent.getHtmlElementsToAvoid();
-    const elementBoundingBoxes = htmlElementsToAvoid.map((element) =>
-      element.getBoundingClientRect()
-    );
-
-    const nextVerticalCollision = this.calculateMovesTillCollision(
+    const nextVerticalCollision = this.calculateMovesTillScreenCollision(
       this.y,
       this.ySpeed,
       0,
       canvas.clientHeight
     );
-    const nextHorizontalCollision = this.calculateMovesTillCollision(
+    const nextHorizontalCollision = this.calculateMovesTillScreenCollision(
       this.x,
       this.xSpeed,
       0,
@@ -117,47 +121,195 @@ export class Particle {
       nextVerticalCollision.nextCollision ===
       nextHorizontalCollision.nextCollision
     ) {
-      this.nextCollision = nextVerticalCollision.nextCollision;
       // Check which of the corners will be hit
       if (
         nextVerticalCollision.positiveAxis &&
         nextHorizontalCollision.positiveAxis
       ) {
-        this.nextCollisionAxis = CollisionAxis.BottomRight;
+        return {
+          nextCollision: nextVerticalCollision.nextCollision,
+          nextCollisionAxis: CollisionAxis.BottomRight,
+        };
       } else if (
         nextVerticalCollision.positiveAxis &&
         !nextHorizontalCollision.positiveAxis
       ) {
-        this.nextCollisionAxis = CollisionAxis.BottomLeft;
+        return {
+          nextCollision: nextVerticalCollision.nextCollision,
+          nextCollisionAxis: CollisionAxis.BottomLeft,
+        };
       } else if (
         !nextVerticalCollision.positiveAxis &&
         nextHorizontalCollision.positiveAxis
       ) {
-        this.nextCollisionAxis = CollisionAxis.TopRight;
+        return {
+          nextCollision: nextVerticalCollision.nextCollision,
+          nextCollisionAxis: CollisionAxis.TopRight,
+        };
       } else {
-        this.nextCollisionAxis = CollisionAxis.TopLeft;
+        return {
+          nextCollision: nextVerticalCollision.nextCollision,
+          nextCollisionAxis: CollisionAxis.TopLeft,
+        };
       }
     } else if (
       nextVerticalCollision.nextCollision <
       nextHorizontalCollision.nextCollision
     ) {
-      this.nextCollision = nextVerticalCollision.nextCollision;
-      this.nextCollisionAxis = nextVerticalCollision.positiveAxis
-        ? CollisionAxis.Bottom
-        : CollisionAxis.Top;
+      return {
+        nextCollision: nextVerticalCollision.nextCollision,
+        nextCollisionAxis: nextVerticalCollision.positiveAxis
+          ? CollisionAxis.Bottom
+          : CollisionAxis.Top,
+      };
     } else {
-      this.nextCollision = nextHorizontalCollision.nextCollision;
-      this.nextCollisionAxis = nextHorizontalCollision.positiveAxis
-        ? CollisionAxis.Right
-        : CollisionAxis.Left;
+      return {
+        nextCollision: nextHorizontalCollision.nextCollision,
+        nextCollisionAxis: nextVerticalCollision.positiveAxis
+          ? CollisionAxis.Right
+          : CollisionAxis.Left,
+      };
+    }
+  }
+
+  private calculateMovesTillBoxCollision(
+    coord: number,
+    speed: number,
+    boxCoord: number,
+    boxIsAhead: boolean
+  ) {
+    const absSpeed = Math.abs(speed);
+
+    const boxIsBehindCollision =
+      Math.floor((coord - this.radius - boxCoord) / absSpeed) + 1;
+    const boxIsAheadCollision =
+      Math.floor((boxCoord - (coord + this.radius - 1)) / absSpeed) + 1;
+
+    !boxIsAhead && console.log("boxIsBehindCollision", boxIsBehindCollision);
+    boxIsAhead && console.log("boxIsAheadCollision", boxIsAheadCollision);
+
+    const nextCollision = boxIsAhead
+      ? boxIsAheadCollision
+      : boxIsBehindCollision;
+    return nextCollision < 0 ? 0 : nextCollision;
+  }
+
+  private calculateHtmlCollision() {
+    const htmlElementsToAvoid = this.parent.getHtmlElementsToAvoid();
+    const htmlCollision = htmlElementsToAvoid.map((element) => {
+      const bounding = element.getBoundingClientRect();
+
+      const isWithinBoxVertically =
+        (this.y + this.radius + this.ySpeed > bounding.top &&
+          this.y < bounding.bottom) ||
+        (this.y - this.radius + this.ySpeed < bounding.bottom &&
+          this.y > bounding.top);
+      const isWithinBoxHorizontally =
+        (this.x + this.radius + this.xSpeed > bounding.left &&
+          this.x < bounding.right) ||
+        (this.x - this.radius + this.xSpeed < bounding.right &&
+          this.x > bounding.left);
+
+      if (isWithinBoxHorizontally && isWithinBoxVertically) {
+        const prevValue = this.previousCollisionAxis;
+        this.previousCollisionAxis = PreviousCollisionAxis.None;
+        return {
+          nextCollision: 0,
+          nextCollisionAxis:
+            prevValue === PreviousCollisionAxis.Horizontal
+              ? CollisionAxis.Top
+              : CollisionAxis.Right,
+        };
+      }
+      // If it isn't within the bounds, we look to when it next might be
+
+      if (isWithinBoxHorizontally && !isWithinBoxVertically) {
+        this.previousCollisionAxis = PreviousCollisionAxis.Horizontal;
+      } else if (isWithinBoxVertically && !isWithinBoxHorizontally) {
+        this.previousCollisionAxis = PreviousCollisionAxis.Vertical;
+      } else {
+        this.previousCollisionAxis = PreviousCollisionAxis.None;
+      }
+
+      const particleIsToTheLeft = this.x < bounding.left;
+      // Get horizontal collision, will be 0 if colliding
+      const nextHorizontalCollision = isWithinBoxHorizontally
+        ? 0
+        : this.calculateMovesTillBoxCollision(
+            this.x,
+            this.xSpeed,
+            particleIsToTheLeft ? bounding.left : bounding.right,
+            particleIsToTheLeft
+          );
+
+      const particleIsAbove = this.x < bounding.top;
+      // Get vertical collision, will be 0 if colliding
+      const nextVerticalCollision = isWithinBoxVertically
+        ? 0
+        : this.calculateMovesTillBoxCollision(
+            this.y,
+            this.ySpeed,
+            particleIsAbove ? bounding.top : bounding.bottom,
+            particleIsAbove
+          );
+
+      // We don't want to choose a 0 value
+      const horizontalValue =
+        nextHorizontalCollision === 0
+          ? nextVerticalCollision
+          : nextHorizontalCollision;
+      const verticalValue =
+        nextVerticalCollision === 0
+          ? nextHorizontalCollision
+          : nextVerticalCollision;
+
+      return {
+        nextCollision:
+          horizontalValue < verticalValue ? horizontalValue : verticalValue,
+        nextCollisionAxis: CollisionAxis.Deferred,
+      };
+    });
+
+    const sortedHtmlCollision = htmlCollision.sort(
+      (a, b) => a.nextCollision - b.nextCollision
+    );
+
+    return sortedHtmlCollision[0];
+  }
+
+  private calculateNextCollision() {
+    const edgeCollision = this.calculateCanvasEdgeCollision();
+    const htmlCollision = this.calculateHtmlCollision();
+
+    console.log("htmlCollision", htmlCollision.nextCollision);
+    console.log("edgeCollision", edgeCollision.nextCollision);
+
+    if (
+      htmlCollision.nextCollision >= 0 &&
+      htmlCollision.nextCollision < edgeCollision.nextCollision
+    ) {
+      console.log("===HTML===");
+
+      this.nextCollision = htmlCollision.nextCollision;
+      this.nextCollisionAxis = htmlCollision.nextCollisionAxis;
+      console.log("this.nextCollision", this.nextCollision);
+      console.log(
+        "this.nextCollisionAxis",
+        CollisionAxis[this.nextCollisionAxis]
+      );
+    } else {
+      console.log("===SCREEN===");
+
+      this.nextCollision = edgeCollision.nextCollision;
+      this.nextCollisionAxis = edgeCollision.nextCollisionAxis;
     }
   }
 
   animate() {
-    const canvas = this.parent.getCanvas();
-    const htmlElementsToAvoid = this.parent.getHtmlElementsToAvoid();
-
     if (this.nextCollision === 0) {
+      console.log("==============COLLISION=============");
+      console.log("xSpeed", this.xSpeed);
+
       switch (this.nextCollisionAxis) {
         case CollisionAxis.Bottom:
         case CollisionAxis.Top:
@@ -174,8 +326,8 @@ export class Particle {
         case CollisionAxis.Right:
           this.xSpeed = -this.xSpeed;
           break;
-        case undefined:
-          // First run so skip actions
+        case CollisionAxis.Deferred:
+          // First run or deferring so skip actions
           break;
         default:
           const failsafe: never = this.nextCollisionAxis;

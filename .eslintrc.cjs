@@ -83,6 +83,7 @@ module.exports = {
 
     // Custom
     {
+      files: ["**/*.{ts,tsx}"],
       rules: {
         "no-case-declarations": 0,
       },

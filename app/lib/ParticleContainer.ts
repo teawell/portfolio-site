@@ -33,17 +33,19 @@ export class ParticleContainer {
     this.maxNumberOfParticles =
       particlesToProduce < 100 ? particlesToProduce : 100;
 
-    this.particles = new Array(this.maxNumberOfParticles).fill("").map(() => {
-      return new Particle(
-        Math.random() * canvas.width,
-        Math.random() * canvas.height,
-        Math.random() * 20,
-        Math.random() * (0.7 - 0.3) + 0.3,
-        -0.5 + Math.random(),
-        -0.5 + Math.random(),
-        this
-      );
-    });
+    this.particles = new Array(this.maxNumberOfParticles)
+      .fill("")
+      .map(() => {
+        return new Particle(
+          Math.random() * canvas.width,
+          Math.random() * canvas.height,
+          Math.random() * 20,
+          Math.random() * (0.7 - 0.3) + 0.3,
+          -0.5 + Math.random(),
+          -0.5 + Math.random(),
+          this
+        );
+      });
 
     this.init();
   }
