@@ -42,7 +42,7 @@ export const HeroSection = () => {
       particleContainer.current.setIsCanvasVisible(isCanvasVisible);
     }
   }, [isCanvasVisible]);
- 
+
   return (
     <section
       id="home"

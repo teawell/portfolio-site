@@ -46,8 +46,8 @@ export class Particle {
     this.y = y;
     this.radius = radius;
     this.fade = fade;
-    this.xSpeed = xSpeed * 5;
-    this.ySpeed = ySpeed * 5;
+    this.xSpeed = xSpeed;
+    this.ySpeed = ySpeed;
     this.parent = parent;
 
     const canvas = this.parent.getCanvas();
