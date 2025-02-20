@@ -80,5 +80,13 @@ module.exports = {
         node: true,
       },
     },
+
+    // Custom
+    {
+      files: ["**/*.{ts,tsx}"],
+      rules: {
+        "no-case-declarations": 0,
+      },
+    },
   ],
 };

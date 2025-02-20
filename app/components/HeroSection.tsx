@@ -58,7 +58,7 @@ export const HeroSection = () => {
           <h1 className="text-2xl/snug sm:text-5xl/snug mb-4 tracking-wider h-full flex flex-col justify-center sm:h-auto">
             <div
               ref={textOneRef}
-              className="p-2 sm:p-0 inline-block animate-fade-right animate-once animate-delay-800"
+              className="p-2 sm:p-0 inline-block animate-fade-right animate-once animate-delay-800 self-center"
             >
               Hello, I&apos;m <span className="text-orange-600">Jon</span>.
             </div>
