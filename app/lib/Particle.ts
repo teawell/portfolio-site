@@ -200,29 +200,38 @@ export class Particle {
           this.x > bounding.left);
 
       if (isWithinBoxHorizontally && isWithinBoxVertically) {
+        const movesAheadToLook = 20;
         // Workout if collision will still happen on each axis after moving
         const willBeWithinBoxVertically =
-          (this.y + this.radius + this.ySpeed * 4 > bounding.top &&
+          (this.y + this.radius + this.ySpeed * movesAheadToLook >
+            bounding.top &&
             this.y < bounding.bottom) ||
-          (this.y - this.radius + this.ySpeed * 4 < bounding.bottom &&
+          (this.y - this.radius + this.ySpeed * movesAheadToLook <
+            bounding.bottom &&
             this.y > bounding.top);
 
         const willBeWithinBoxVerticallyIfReversed =
-          (this.y + this.radius + this.ySpeed * -4 > bounding.top &&
+          (this.y + this.radius + this.ySpeed * -movesAheadToLook >
+            bounding.top &&
             this.y < bounding.bottom) ||
-          (this.y - this.radius + this.ySpeed * -4 < bounding.bottom &&
+          (this.y - this.radius + this.ySpeed * -movesAheadToLook <
+            bounding.bottom &&
             this.y > bounding.top);
 
         const willBeWithinBoxHorizontally =
-          (this.x + this.radius + this.xSpeed * 4 > bounding.left &&
+          (this.x + this.radius + this.xSpeed * movesAheadToLook >
+            bounding.left &&
             this.x < bounding.right) ||
-          (this.x - this.radius + this.xSpeed * 4 < bounding.right &&
+          (this.x - this.radius + this.xSpeed * movesAheadToLook <
+            bounding.right &&
             this.x > bounding.left);
 
         const willBeWithinBoxHorizontallyIfReversed =
-          (this.x + this.radius + this.xSpeed * -4 > bounding.left &&
+          (this.x + this.radius + this.xSpeed * -movesAheadToLook >
+            bounding.left &&
             this.x < bounding.right) ||
-          (this.x - this.radius + this.xSpeed * -4 < bounding.right &&
+          (this.x - this.radius + this.xSpeed * -movesAheadToLook <
+            bounding.right &&
             this.x > bounding.left);
 
         // Checking whether changing direction will prevent collision
@@ -299,7 +308,7 @@ export class Particle {
     const sortedHtmlCollision = htmlCollision.sort(
       (a, b) => a.nextCollision - b.nextCollision
     );
-    
+
     // Filter to collisions that we know will happen
     const notDeferred = sortedHtmlCollision.filter(
       (collision) => collision.nextCollisionAxis !== CollisionAxis.Deferred
@@ -320,7 +329,6 @@ export class Particle {
       htmlCollision.nextCollision >= 0 &&
       htmlCollision.nextCollision < edgeCollision.nextCollision
     ) {
-
       this.nextCollision = htmlCollision.nextCollision;
       this.nextCollisionAxis = htmlCollision.nextCollisionAxis;
     } else {
