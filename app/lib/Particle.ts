@@ -12,12 +12,6 @@ enum CollisionAxis {
   Deferred,
 }
 
-enum PreviousCollisionAxis {
-  Vertical,
-  Horizontal,
-  None,
-}
-
 export class Particle {
   private x: number;
   private y: number;
@@ -28,8 +22,6 @@ export class Particle {
   private parent: ParticleContainer;
   private nextCollision: number = 0;
   private nextCollisionAxis: CollisionAxis = CollisionAxis.Deferred;
-  private previousCollisionAxis: PreviousCollisionAxis =
-    PreviousCollisionAxis.None;
 
   private isColliding(boxElement: HTMLElement) {
     const box = boxElement.getBoundingClientRect();
@@ -185,9 +177,6 @@ export class Particle {
     const boxIsAheadCollision =
       Math.floor((boxCoord - (coord + this.radius - 1)) / absSpeed) + 1;
 
-    !boxIsAhead && console.log("boxIsBehindCollision", boxIsBehindCollision);
-    boxIsAhead && console.log("boxIsAheadCollision", boxIsAheadCollision);
-
     const nextCollision = boxIsAhead
       ? boxIsAheadCollision
       : boxIsBehindCollision;
@@ -211,27 +200,63 @@ export class Particle {
           this.x > bounding.left);
 
       if (isWithinBoxHorizontally && isWithinBoxVertically) {
-        const prevValue = this.previousCollisionAxis;
-        this.previousCollisionAxis = PreviousCollisionAxis.None;
-        return {
-          nextCollision: 0,
-          nextCollisionAxis:
-            prevValue === PreviousCollisionAxis.Horizontal
-              ? CollisionAxis.Top
-              : CollisionAxis.Right,
-        };
+        // Workout if collision will still happen on each axis after moving
+        const willBeWithinBoxVertically =
+          (this.y + this.radius + this.ySpeed * 4 > bounding.top &&
+            this.y < bounding.bottom) ||
+          (this.y - this.radius + this.ySpeed * 4 < bounding.bottom &&
+            this.y > bounding.top);
+
+        const willBeWithinBoxVerticallyIfReversed =
+          (this.y + this.radius + this.ySpeed * -4 > bounding.top &&
+            this.y < bounding.bottom) ||
+          (this.y - this.radius + this.ySpeed * -4 < bounding.bottom &&
+            this.y > bounding.top);
+
+        const willBeWithinBoxHorizontally =
+          (this.x + this.radius + this.xSpeed * 4 > bounding.left &&
+            this.x < bounding.right) ||
+          (this.x - this.radius + this.xSpeed * 4 < bounding.right &&
+            this.x > bounding.left);
+
+        const willBeWithinBoxHorizontallyIfReversed =
+          (this.x + this.radius + this.xSpeed * -4 > bounding.left &&
+            this.x < bounding.right) ||
+          (this.x - this.radius + this.xSpeed * -4 < bounding.right &&
+            this.x > bounding.left);
+
+        // Checking whether changing direction will prevent collision
+        if (
+          willBeWithinBoxHorizontally &&
+          !willBeWithinBoxHorizontallyIfReversed &&
+          willBeWithinBoxVertically &&
+          !willBeWithinBoxVerticallyIfReversed
+        ) {
+          return {
+            nextCollision: 0,
+            nextCollisionAxis: CollisionAxis.TopRight,
+          };
+        } else if (
+          willBeWithinBoxHorizontally &&
+          !willBeWithinBoxHorizontallyIfReversed
+        ) {
+          return {
+            nextCollision: 0,
+            nextCollisionAxis: CollisionAxis.Right,
+          };
+        } else if (
+          willBeWithinBoxVertically &&
+          !willBeWithinBoxVerticallyIfReversed
+        ) {
+          return {
+            nextCollision: 0,
+            nextCollisionAxis: CollisionAxis.Top,
+          };
+        }
       }
       // If it isn't within the bounds, we look to when it next might be
 
-      if (isWithinBoxHorizontally && !isWithinBoxVertically) {
-        this.previousCollisionAxis = PreviousCollisionAxis.Horizontal;
-      } else if (isWithinBoxVertically && !isWithinBoxHorizontally) {
-        this.previousCollisionAxis = PreviousCollisionAxis.Vertical;
-      } else {
-        this.previousCollisionAxis = PreviousCollisionAxis.None;
-      }
-
-      const particleIsToTheLeft = this.x < bounding.left;
+      const particleIsToTheLeft = this.x + this.radius < bounding.left;
       // Get horizontal collision, will be 0 if colliding
       const nextHorizontalCollision = isWithinBoxHorizontally
         ? 0
@@ -242,7 +267,7 @@ export class Particle {
             particleIsToTheLeft
           );
 
-      const particleIsAbove = this.x < bounding.top;
+      const particleIsAbove = this.y + this.radius < bounding.top;
       // Get vertical collision, will be 0 if colliding
       const nextVerticalCollision = isWithinBoxVertically
         ? 0
@@ -270,36 +295,35 @@ export class Particle {
       };
     });
 
+    // Order them based on distance to collision
     const sortedHtmlCollision = htmlCollision.sort(
       (a, b) => a.nextCollision - b.nextCollision
     );
+    
+    // Filter to collisions that we know will happen
+    const notDeferred = sortedHtmlCollision.filter(
+      (collision) => collision.nextCollisionAxis !== CollisionAxis.Deferred
+    );
 
-    return sortedHtmlCollision[0];
+    if (notDeferred.length > 0) {
+      return notDeferred[0];
+    } else {
+      return sortedHtmlCollision[0];
+    }
   }
 
   private calculateNextCollision() {
     const edgeCollision = this.calculateCanvasEdgeCollision();
     const htmlCollision = this.calculateHtmlCollision();
 
-    console.log("htmlCollision", htmlCollision.nextCollision);
-    console.log("edgeCollision", edgeCollision.nextCollision);
-
     if (
       htmlCollision.nextCollision >= 0 &&
       htmlCollision.nextCollision < edgeCollision.nextCollision
     ) {
-      console.log("===HTML===");
 
       this.nextCollision = htmlCollision.nextCollision;
       this.nextCollisionAxis = htmlCollision.nextCollisionAxis;
-      console.log("this.nextCollision", this.nextCollision);
-      console.log(
-        "this.nextCollisionAxis",
-        CollisionAxis[this.nextCollisionAxis]
-      );
     } else {
-      console.log("===SCREEN===");
-
       this.nextCollision = edgeCollision.nextCollision;
       this.nextCollisionAxis = edgeCollision.nextCollisionAxis;
     }
@@ -307,9 +331,6 @@ export class Particle {
 
   animate() {
     if (this.nextCollision === 0) {
-      console.log("==============COLLISION=============");
-      console.log("xSpeed", this.xSpeed);
-
       switch (this.nextCollisionAxis) {
         case CollisionAxis.Bottom:
         case CollisionAxis.Top:
@@ -347,25 +368,5 @@ export class Particle {
       this.y += this.ySpeed;
       this.create();
     }
-    // Check for collision with HTML elements
-    // const collidingItem = htmlElementsToAvoid.find((box) =>
-    //   this.isColliding(box)
-    // );
-
-    // if (collidingItem) {
-    //   const collidingItemBox = collidingItem.getBoundingClientRect();
-    //   // Check whether a change of vertical/horizontal direction would prevent collision, if so do it
-    //   if (
-    //     this.y - this.ySpeed < collidingItemBox.top - this.radius ||
-    //     this.y - this.ySpeed > collidingItemBox.bottom + this.radius
-    //   ) {
-    //     this.ySpeed = -this.ySpeed;
-    //   } else if (
-    //     this.x - this.xSpeed < collidingItemBox.left - this.radius ||
-    //     this.x - this.xSpeed > collidingItemBox.right + this.radius
-    //   ) {
-    //     this.xSpeed = -this.xSpeed;
-    //   }
-    // }
   }
 }

@@ -6,6 +6,8 @@ type Props = {
   htmlElementsToAvoid: HTMLElement[];
 };
 
+const ENABLE_DEBUG = process.env.NODE_ENV === "development" && false;
+
 export class ParticleContainer {
   private particles: Particle[];
   private canvas: HTMLCanvasElement;
@@ -14,6 +16,7 @@ export class ParticleContainer {
   private animationRequestFrameId?: number;
   private isVisible: boolean = false;
   private maxNumberOfParticles: number;
+  private limitMoves: number = 100;
 
   constructor({ canvas, context, htmlElementsToAvoid }: Props) {
     // look up the size the canvas is being displayed
@@ -59,7 +62,7 @@ export class ParticleContainer {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.particles.forEach((particle) => particle.animate());
 
-    if (process.env.NODE_ENV === "development") {
+    if (ENABLE_DEBUG) {
       this.context.filter = "blur(0)";
       this.context.strokeStyle = "red";
       this.htmlElementsToAvoid.forEach((element) => {
@@ -73,9 +76,10 @@ export class ParticleContainer {
       });
     }
 
-    if (this.isVisible) {
+    if (this.isVisible && this.limitMoves > 0) {
+      this.limitMoves = ENABLE_DEBUG ? this.limitMoves - 1 : this.limitMoves;
       this.animationRequestFrameId = requestAnimationFrame(() =>
-        this.animate()
+        this.animate() 
       );
     }
   }
