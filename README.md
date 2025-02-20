@@ -1,40 +1,20 @@
-# Welcome to Remix!
+# Welcome to my Portfolio site!
 
-- 📖 [Remix docs](https://remix.run/docs)
+It uses the following technologies:
+- [React](https://react.dev/)
+- [Remix](https://remix.run/docs)
+- [Tailwind](https://tailwindcss.com/)
+- [Typescript](https://www.typescriptlang.org/)
 
-## Development
+and is hosted on Vercel at [teawell.me](https://teawell.me)
 
-Run the dev server:
+## Remix
+Currently the website doesn't make full use of the great features of Remix, like [outlets](https://remix.run/docs/en/main/components/outlet) or any of the API calling functionality. It does however create very optimised files ensuring great site speed.
 
-```shellscript
-npm run dev
-```
+## Canvas
+This was my first time using canvas, I thoroughly enjoyed getting to know the intricacies of how it works. The most complex aspect ended up being the collision algorithm. 
 
-## Deployment
+Originally for each animation frame I had each particle check to see if it was colliding but I found that whilst this worked great on some devices, older devices struggled to keep up with the computation.
 
-First, build your app for production:
+As a result I made 2 changes; the first to pause animations while the canvas is out of view and the second was to change the algorithm to look ahead. The algorithm will now calculate how many animation frames it will be until a potential collision occurs and then render for that many frames. This way we don't need to run a check every single frame for every single particle, depending on screen size this could be up to 1000 less checks per particle!
 
-```sh
-npm run build
-```
-
-Then run the app in production mode:
-
-```sh
-npm start
-```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
